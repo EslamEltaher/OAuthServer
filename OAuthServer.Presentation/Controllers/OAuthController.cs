@@ -29,7 +29,13 @@ namespace OAuthServer.Presentation.Controllers
         [Route("OAuth/Authorize")]
         public async Task<IActionResult> Authorize(AuthorizeModel model)
         {
-            return Ok();
+            string authorization_code = "ABCDEF";
+
+            var redirection_path = model.redirect_uri + "?code=" + authorization_code;
+            if (!string.IsNullOrEmpty(model.state))
+                redirection_path += "&state=" + model.state;
+
+            return Redirect(redirection_path);
         }
 
         [HttpPost]
