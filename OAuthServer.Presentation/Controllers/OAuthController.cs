@@ -21,12 +21,13 @@ namespace OAuthServer.Presentation.Controllers
                 //ModelState.AddModelError("")
             }
 
-            return View("Authorize");
+
+            return View("Authorize", model);
         }
 
         [HttpPost]
         [Route("OAuth/Authorize")]
-        public async Task<IActionResult> Authorize()
+        public async Task<IActionResult> Authorize(AuthorizeModel model)
         {
             return Ok();
         }

@@ -3,5 +3,19 @@
     ViewData["Title"] = "Authorize";
 }
 
+<form asp-controller="OAuth" asp-action="Authorize" method="post">
+    <button type="submit">Submit</button>
+
+    @if (Model is AuthorizeModel)
+    {
+        var _model = Model as AuthorizeModel;
+        <input type="hidden" name="client_id" value="@_model.client_id" />
+        <input type="hidden" name="redirect_uri" value="@_model.redirect_uri" />
+        <input type="hidden" name="response_type" value="@_model.response_type" />
+        <input type="hidden" name="scope" value="@_model.scope" />
+        <input type="hidden" name="state" value="@_model.state" />
+    }
+    @Html.AntiForgeryToken()
+</form>
 <h2>Authorize</h2>
 
