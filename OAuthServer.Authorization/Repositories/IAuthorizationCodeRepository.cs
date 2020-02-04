@@ -8,7 +8,8 @@ namespace OAuthServer.Authorization.Repositories
 {
     public interface IAuthorizationCodeRepository
     {
-        Task<AuthorizationCode> GetAuthorizationCode(string client_id, string user_id);
+        Task<AuthorizationCode> GetAuthorizationCodeByUserId(string client_id, string user_id);
+        Task<AuthorizationCode> GetAuthorizationCodeByCode(string code);
         void AddAuthorizationCode(AuthorizationCode code);
         void RemoveRange(IEnumerable<AuthorizationCode> codes);
     }

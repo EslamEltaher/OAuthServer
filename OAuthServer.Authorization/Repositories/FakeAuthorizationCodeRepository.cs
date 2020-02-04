@@ -21,7 +21,7 @@ namespace OAuthServer.Authorization.Repositories
             AuthorizationCodes.Add(code);
         }
 
-        public async Task<AuthorizationCode> GetAuthorizationCode(string client_id, string user_id)
+        public async Task<AuthorizationCode> GetAuthorizationCodeByUserId(string client_id, string user_id)
         {
             var code = AuthorizationCodes.FirstOrDefault(c => c.Consent.Client_Id == client_id 
                 && c.Consent.User_Id == user_id
@@ -37,6 +37,12 @@ namespace OAuthServer.Authorization.Repositories
             {
                 AuthorizationCodes.Remove(code);
             }
+        }
+
+        public async Task<AuthorizationCode> GetAuthorizationCodeByCode(string code)
+        {
+            var authorization_code = AuthorizationCodes.FirstOrDefault(c => c.Code == code);
+            return await Task.FromResult(authorization_code);
         }
     }
 }
