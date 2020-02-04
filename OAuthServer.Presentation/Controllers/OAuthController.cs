@@ -13,11 +13,13 @@ namespace OAuthServer.Presentation.Controllers
     {
         private readonly IClientRepository _clientRepository;
         private readonly IConsentRepository _consentRepository;
+        private readonly IAuthorizationCodeRepository _authorizationCodeRepository;
 
-        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository)
+        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository, IAuthorizationCodeRepository authorizationCodeRepository)
         {
             _clientRepository = clientRepository;
             _consentRepository = consentRepository;
+            _authorizationCodeRepository = authorizationCodeRepository;
         }
 
         [HttpGet]
@@ -73,10 +75,24 @@ namespace OAuthServer.Presentation.Controllers
                 //DB.SaveChanges
             }
 
+            var existingcode = await _authorizationCodeRepository.GetAuthorizationCode(model.client_id, username);
+            if(existingcode != null)
+            {
+                //_authorizationCodeRepository.RemoveRange(new List<AuthorizationCode>() { existingcode });
+                existingcode.Expired = true;
+            }
 
-            string authorization_code = "ABCDEF";
+            var bytes = new byte[16];
+            new Random().NextBytes(bytes);
+            string hex = BitConverter.ToString(bytes).Replace("-", string.Empty);
 
-            var redirection_path = model.redirect_uri + "?code=" + authorization_code;
+            var authCode = new AuthorizationCode(hex, consent, DateTime.Now.AddMinutes(5));
+            _authorizationCodeRepository.AddAuthorizationCode(authCode);
+
+
+            string authorization_code = authCode.Code;
+
+             var redirection_path = model.redirect_uri + "?code=" + authorization_code;
             if (!string.IsNullOrEmpty(model.state))
                 redirection_path += "&state=" + model.state;
 

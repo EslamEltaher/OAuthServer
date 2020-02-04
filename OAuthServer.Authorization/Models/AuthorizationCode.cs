@@ -8,8 +8,7 @@ namespace OAuthServer.Authorization.Models
     {
         public AuthorizationCode(string code, Consent consent, DateTime expiry)
         {
-
-
+            Code = code;
             Consent = consent;
             Expiry = expiry;
         }

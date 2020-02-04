@@ -47,10 +47,14 @@ namespace OAuthServer.Presentation
             services.AddScoped<JwtSecurityTokenHelper>();
 
             services.AddScoped<IClientRepository, FakeClientRepository>();
+            services.AddScoped<IConsentRepository, FakeConsentRepository>();
+            services.AddScoped<IAuthorizationCodeRepository, FakeAuthorizationCodeRepository>();
+
             new FakeClientRepository().AddClient(new Authorization.Models.Client()
             {
                 Client_Id = "client_1",
-                Client_Secret = "password_1"
+                Client_Secret = "password_1",
+                Redirect_Uri = "http://tryingOAuth.com/cb"
             });
 
             var keyInConfiguration = Configuration.GetSection("SecurityConfig:SigningKey").Value;
