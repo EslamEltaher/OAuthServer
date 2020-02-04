@@ -12,7 +12,7 @@ namespace OAuthServer.Presentation.Controllers
         [HttpGet]
         [Route("OAuth/Authorize")]
         //public IActionResult AuthorizeLogin(string client_id, string response_type, string redirect_uri, string scope = "", string state = "")
-        public IActionResult AuthorizeLogin([FromQuery]AuthorizeModel model)
+        public async Task<IActionResult> AuthorizeLogin([FromQuery]AuthorizeModel model)
         {
             bool valid = ModelState.IsValid;
 
@@ -21,6 +21,12 @@ namespace OAuthServer.Presentation.Controllers
                 //ModelState.AddModelError("")
             }
 
+            bool isConsentRequired = false;
+
+            if (!isConsentRequired)
+            {
+                return await Authorize(model);
+            }
 
             return View("Authorize", model);
         }
