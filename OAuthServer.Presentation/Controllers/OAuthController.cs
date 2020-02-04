@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using OAuthServer.Presentation.Models;
 
@@ -11,10 +12,12 @@ namespace OAuthServer.Presentation.Controllers
     public class OAuthController : Controller
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IConsentRepository _consentRepository;
 
-        public OAuthController(IClientRepository clientRepository)
+        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository)
         {
             _clientRepository = clientRepository;
+            _consentRepository = consentRepository;
         }
 
         [HttpGet]
@@ -54,6 +57,23 @@ namespace OAuthServer.Presentation.Controllers
         [Route("OAuth/Authorize")]
         public async Task<IActionResult> Authorize(AuthorizeModel model)
         {
+            var username = "user1";
+
+            var consent = await _consentRepository.GetUserConsentByClientId(model.client_id, username);
+
+            if (consent == null)
+            {
+                consent = consent ?? new Consent()
+                {
+                    Client_Id = model.client_id,
+                    User_Id = username,
+                    Scope = model.scope
+                };
+                _consentRepository.AddConsent(consent);
+                //DB.SaveChanges
+            }
+
+
             string authorization_code = "ABCDEF";
 
             var redirection_path = model.redirect_uri + "?code=" + authorization_code;
