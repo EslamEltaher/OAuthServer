@@ -29,6 +29,8 @@ namespace OAuthServer.Presentation.Controllers
         {
             bool valid = ModelState.IsValid;
 
+            var username = "user1";
+
             var client = await _clientRepository.GetClientById(model.client_id);
             if(client == null)
             {
@@ -45,7 +47,12 @@ namespace OAuthServer.Presentation.Controllers
                 //ModelState.AddModelError("")
             }
 
-            bool isConsentRequired = false;
+            var consent = await _consentRepository.GetUserConsentByClientId(model.client_id, username);
+
+            bool isConsentRequired = true;
+
+            if (consent != null)
+                isConsentRequired = false;
 
             if (!isConsentRequired)
             {
