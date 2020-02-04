@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "b24382c4-2ad5-459b-aa98-34718c8b840f",
+		"name": "OAuthTrials",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44313/OAuth/authorize?response_type=code&client_id=abbb&redirect_uri=http://tryingOAuth.com/cb&state=ABCDEF",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44313",
+					"path": [
+						"OAuth",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "client_id",
+							"value": "abbb"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://tryingOAuth.com/cb"
+						},
+						{
+							"key": "state",
+							"value": "ABCDEF"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authPost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44313/OAuth/Authorize",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44313",
+					"path": [
+						"OAuth",
+						"Authorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44313/OAuth/token",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44313",
+					"path": [
+						"OAuth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "normal token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44313/api/Auth/Token",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44313",
+					"path": [
+						"api",
+						"Auth",
+						"Token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "home ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Presentation", "OAuthServer.Presentation\OAuthServer.Presentation.csproj", "{26813CC4-3F74-42D8-BDEA-AF27A4FC9457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Presentation", "OAuthServer.Presentation\OAuthServer.Presentation.csproj", "{26813CC4-3F74-42D8-BDEA-AF27A4FC9457}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Util", "OAuthServer.Util\OAuthServer.Util.csproj", "{85730063-A7E9-455E-B468-22CB8FC4B41D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Util", "OAuthServer.Util\OAuthServer.Util.csproj", "{85730063-A7E9-455E-B468-22CB8FC4B41D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Authorization", "OAuthServer.Authorization\OAuthServer.Authorization.csproj", "{F851C885-7267-4D64-A60A-A30C53744114}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Authorization", "OAuthServer.Authorization\OAuthServer.Authorization.csproj", "{F851C885-7267-4D64-A60A-A30C53744114}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA767B4F-C953-4252-94E4-1CB9B12D0A41}"
+	ProjectSection(SolutionItems) = preProject
+		OAuthTrials.postman_collection.json = OAuthTrials.postman_collection.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
