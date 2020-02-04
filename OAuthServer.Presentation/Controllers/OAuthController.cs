@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using OAuthServer.Presentation.Models;
+using OAuthServer.Util;
 
 namespace OAuthServer.Presentation.Controllers
 {
@@ -14,12 +15,14 @@ namespace OAuthServer.Presentation.Controllers
         private readonly IClientRepository _clientRepository;
         private readonly IConsentRepository _consentRepository;
         private readonly IAuthorizationCodeRepository _authorizationCodeRepository;
+        private readonly JwtSecurityTokenHelper _tokenHelper;
 
-        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository, IAuthorizationCodeRepository authorizationCodeRepository)
+        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository, IAuthorizationCodeRepository authorizationCodeRepository, JwtSecurityTokenHelper tokenHelper)
         {
             _clientRepository = clientRepository;
             _consentRepository = consentRepository;
             _authorizationCodeRepository = authorizationCodeRepository;
+            _tokenHelper = tokenHelper;
         }
 
         [HttpGet]
@@ -82,7 +85,7 @@ namespace OAuthServer.Presentation.Controllers
                 //DB.SaveChanges
             }
 
-            var existingcode = await _authorizationCodeRepository.GetAuthorizationCode(model.client_id, username);
+            var existingcode = await _authorizationCodeRepository.GetAuthorizationCodeByUserId(model.client_id, username);
             if(existingcode != null)
             {
                 //_authorizationCodeRepository.RemoveRange(new List<AuthorizationCode>() { existingcode });
@@ -113,16 +116,34 @@ namespace OAuthServer.Presentation.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if(model.Grant_Type != "authorization_code")
+            var username = "user1";
+
+            if (model.Grant_Type != "authorization_code")
             {
                 ModelState.AddModelError("grant_type", "unsupported grant type");
 
                 return BadRequest(ModelState);
             }
 
+            // validate client
+            var client = await _clientRepository.GetClientById(model.Client_Id);
+            if (client.Client_Secret != model.Client_Secret)
+                return BadRequest("Invalid Client Information");
+
+            // get code
+            var code = await _authorizationCodeRepository.GetAuthorizationCodeByCode(model.Code);
+            if (code == null || code.Expired || code.Expiry <= DateTime.Now)
+                return BadRequest("Code Invalid or Expired");
+
+
+            var jwtToken = _tokenHelper.GenerateJwtToken(new List<System.Security.Claims.Claim>() {
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, username),
+                new System.Security.Claims.Claim("cid", client.Client_Id),
+            });
+
             var response = new AccessTokenResponse()
             {
-                Access_Token = "ABASDASDSADSADSAD",
+                Access_Token = jwtToken,
                 Scope = "my_scope",
                 Token_Type = "bearer"
             };
