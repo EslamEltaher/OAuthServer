@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Presentation", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Util", "OAuthServer.Util\OAuthServer.Util.csproj", "{85730063-A7E9-455E-B468-22CB8FC4B41D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Authorization", "OAuthServer.Authorization\OAuthServer.Authorization.csproj", "{F851C885-7267-4D64-A60A-A30C53744114}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{85730063-A7E9-455E-B468-22CB8FC4B41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85730063-A7E9-455E-B468-22CB8FC4B41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85730063-A7E9-455E-B468-22CB8FC4B41D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F851C885-7267-4D64-A60A-A30C53744114}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F851C885-7267-4D64-A60A-A30C53744114}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F851C885-7267-4D64-A60A-A30C53744114}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F851C885-7267-4D64-A60A-A30C53744114}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
