@@ -40,9 +40,26 @@ namespace OAuthServer.Presentation.Controllers
 
         [HttpPost]
         [Route("OAuth/Token")]
-        public async Task<IActionResult> GetAccessToken()
+        public async Task<IActionResult> GetAccessToken([FromBody] AccessTokenRequestModel model)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if(model.Grant_Type != "authorization_code")
+            {
+                ModelState.AddModelError("grant_type", "unsupported grant type");
+
+                return BadRequest(ModelState);
+            }
+
+            var response = new AccessTokenResponse()
+            {
+                Access_Token = "ABASDASDSADSADSAD",
+                Scope = "my_scope",
+                Token_Type = "bearer"
+            };
+
+            return Ok(response);
         }
     }
 }
