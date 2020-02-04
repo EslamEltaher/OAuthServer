@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OAuthServer.Authorization.Repositories;
 using OAuthServer.Util;
 
 namespace OAuthServer.Presentation
@@ -44,6 +45,13 @@ namespace OAuthServer.Presentation
             });
 
             services.AddScoped<JwtSecurityTokenHelper>();
+
+            services.AddScoped<IClientRepository, FakeClientRepository>();
+            new FakeClientRepository().AddClient(new Authorization.Models.Client()
+            {
+                Client_Id = "client_1",
+                Client_Secret = "password_1"
+            });
 
             var keyInConfiguration = Configuration.GetSection("SecurityConfig:SigningKey").Value;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyInConfiguration));
