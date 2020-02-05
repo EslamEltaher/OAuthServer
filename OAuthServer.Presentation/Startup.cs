@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -62,21 +63,40 @@ namespace OAuthServer.Presentation
 
             services.AddSingleton<SecurityKey>(securityKey);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
+            #region Authentication
+            services.AddAuthentication(options => {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                options.LoginPath = "/User/Login";
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
 
-                        IssuerSigningKey = securityKey,
-                        ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = securityKey,
+                    ValidateIssuerSigningKey = true,
 
-                        
-                    };
-                });
 
-            services.AddAuthorization();
+                };
+            });
+
+            #region Trials
+            //services.AddAuthentication(options => {
+
+                //options.AddScheme("cookieBased", builder => {
+                //    builder.HandlerType = typeof(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler);
+                //});
+
+                //    options.DefaultAuthenticateScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+                //    options.DefaultSignInScheme= Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+                //    options.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+            //})
+
+            #endregion
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

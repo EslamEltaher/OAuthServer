@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
@@ -25,6 +27,7 @@ namespace OAuthServer.Presentation.Controllers
             _tokenHelper = tokenHelper;
         }
 
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("OAuth/Authorize")]
         //public IActionResult AuthorizeLogin(string client_id, string response_type, string redirect_uri, string scope = "", string state = "")
@@ -65,6 +68,7 @@ namespace OAuthServer.Presentation.Controllers
             return View("Authorize", model);
         }
 
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpPost]
         [Route("OAuth/Authorize")]
         public async Task<IActionResult> Authorize(AuthorizeModel model)
