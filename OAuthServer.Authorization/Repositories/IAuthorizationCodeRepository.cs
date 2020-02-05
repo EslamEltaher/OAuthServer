@@ -12,5 +12,6 @@ namespace OAuthServer.Authorization.Repositories
         Task<AuthorizationCode> GetAuthorizationCodeByCode(string code);
         void AddAuthorizationCode(AuthorizationCode code);
         void RemoveRange(IEnumerable<AuthorizationCode> codes);
+        void InvalidateCode(AuthorizationCode code);
     }
 }

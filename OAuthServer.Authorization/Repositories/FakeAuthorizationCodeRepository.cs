@@ -44,5 +44,11 @@ namespace OAuthServer.Authorization.Repositories
             var authorization_code = AuthorizationCodes.FirstOrDefault(c => c.Code == code);
             return await Task.FromResult(authorization_code);
         }
+
+        public void InvalidateCode(AuthorizationCode code)
+        {
+            code.Expired = true;
+            //update code
+        }
     }
 }

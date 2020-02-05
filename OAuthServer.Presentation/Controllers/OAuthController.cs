@@ -135,6 +135,8 @@ namespace OAuthServer.Presentation.Controllers
             if (code == null || code.Expired || code.Expiry <= DateTime.Now)
                 return BadRequest("Code Invalid or Expired");
 
+            //invalidate Code after use
+            _authorizationCodeRepository.InvalidateCode(code);
 
             var jwtToken = _tokenHelper.GenerateJwtToken(new List<System.Security.Claims.Claim>() {
                 new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, username),
