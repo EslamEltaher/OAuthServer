@@ -9,7 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OAuthServer.Application\OAuthServer.Application.csproj" />
     <ProjectReference Include="..\OAuthServer.Authorization.EntityFramework\OAuthServer.Authorization.EntityFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
