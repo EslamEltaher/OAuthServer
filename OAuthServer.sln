@@ -11,12 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Authorization",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA767B4F-C953-4252-94E4-1CB9B12D0A41}"
 	ProjectSection(SolutionItems) = preProject
+		Info.txt = Info.txt
 		OAuthTrials.postman_collection.json = OAuthTrials.postman_collection.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Authorization.EntityFramework", "OAuthServer.Authorization.EntityFramework\OAuthServer.Authorization.EntityFramework.csproj", "{CC7FB092-484D-42C2-867C-824751258DE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Authorization.EntityFramework", "OAuthServer.Authorization.EntityFramework\OAuthServer.Authorization.EntityFramework.csproj", "{CC7FB092-484D-42C2-867C-824751258DE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Persistence", "OAuthServer.Persistence\OAuthServer.Persistence.csproj", "{BCDBA3C1-16BD-4255-ABA6-810142FA3308}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Persistence", "OAuthServer.Persistence\OAuthServer.Persistence.csproj", "{BCDBA3C1-16BD-4255-ABA6-810142FA3308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
