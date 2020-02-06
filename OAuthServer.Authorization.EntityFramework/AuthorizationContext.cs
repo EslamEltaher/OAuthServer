@@ -22,7 +22,11 @@ namespace OAuthServer.Authorization.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
+            modelBuilder.Entity<Consent>().HasKey(c => new { c.Client_Id, c.User_Id });
+
             modelBuilder.Ignore<AuthorizationCode>();
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -14,5 +14,13 @@ namespace OAuthServer.Persistence
         //IAuthorizationContext
         public DbSet<Consent> Consents { get; set; }
         public DbSet<Client> Clients { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
+            modelBuilder.Entity<Consent>().HasKey(c => new { c.Client_Id, c.User_Id });
+            
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
