@@ -9,7 +9,7 @@ namespace OAuthServer.Persistence
     public class OAuthContext: DbContext, IAuthorizationContext<User>
     {
         //constructor
-        public OAuthContext(DbContextOptions options) : base(options) { }
+        public OAuthContext(DbContextOptions<OAuthContext> options) : base(options) { }
 
 
         //IAuthorizationContext
