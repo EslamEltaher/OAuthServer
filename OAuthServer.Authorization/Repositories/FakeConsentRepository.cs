@@ -7,21 +7,21 @@ using OAuthServer.Authorization.Models;
 
 namespace OAuthServer.Authorization.Repositories
 {
-    public class FakeConsentRepository : IConsentRepository
+    public class FakeConsentRepository<TUser> : IConsentRepository<TUser> where TUser : IResourceOwner
     {
 
-        public static List<Consent> Consents { get; }
+        public static List<Consent<TUser>> Consents { get; }
         static FakeConsentRepository()
         {
-            Consents = new List<Consent>();
+            Consents = new List<Consent<TUser>>();
         }
 
-        public void AddConsent(Consent consent)
+        public void AddConsent(Consent<TUser> consent)
         {
             Consents.Add(consent);
         }
 
-        public async Task<Consent> GetUserConsentByClientId(string client_id, string user_id)
+        public async Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id)
         {
             var consent = Consents.FirstOrDefault(c => c.Client_Id == client_id && c.User_Id == user_id);
             return await Task.FromResult(consent);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OAuthServer.Application;
 using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using OAuthServer.Presentation.Models;
@@ -15,11 +16,11 @@ namespace OAuthServer.Presentation.Controllers
     public class OAuthController : Controller
     {
         private readonly IClientRepository _clientRepository;
-        private readonly IConsentRepository _consentRepository;
-        private readonly IAuthorizationCodeRepository _authorizationCodeRepository;
+        private readonly IConsentRepository<User> _consentRepository;
+        private readonly IAuthorizationCodeRepository<User> _authorizationCodeRepository;
         private readonly JwtSecurityTokenHelper _tokenHelper;
 
-        public OAuthController(IClientRepository clientRepository, IConsentRepository consentRepository, IAuthorizationCodeRepository authorizationCodeRepository, JwtSecurityTokenHelper tokenHelper)
+        public OAuthController(IClientRepository clientRepository, IConsentRepository<User> consentRepository, IAuthorizationCodeRepository<User> authorizationCodeRepository, JwtSecurityTokenHelper tokenHelper)
         {
             _clientRepository = clientRepository;
             _consentRepository = consentRepository;
@@ -79,7 +80,7 @@ namespace OAuthServer.Presentation.Controllers
 
             if (consent == null)
             {
-                consent = consent ?? new Consent()
+                consent = consent ?? new Consent<User>()
                 {
                     Client_Id = model.client_id,
                     User_Id = username,
@@ -100,7 +101,7 @@ namespace OAuthServer.Presentation.Controllers
             new Random().NextBytes(bytes);
             string hex = BitConverter.ToString(bytes).Replace("-", string.Empty);
 
-            var authCode = new AuthorizationCode(hex, consent, DateTime.Now.AddMinutes(5));
+            var authCode = new AuthorizationCode<User>(hex, consent, DateTime.Now.AddMinutes(5));
             _authorizationCodeRepository.AddAuthorizationCode(authCode);
 
 

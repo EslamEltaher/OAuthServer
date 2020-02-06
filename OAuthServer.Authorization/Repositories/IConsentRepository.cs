@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OAuthServer.Authorization.Repositories
 {
-    public interface IConsentRepository
+    public interface IConsentRepository<TUser> where TUser : IResourceOwner
     {
-        Task<Consent> GetUserConsentByClientId(string client_id, string user_id);
-        void AddConsent(Consent consent);
+        Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id);
+        void AddConsent(Consent<TUser> consent);
     }
 }

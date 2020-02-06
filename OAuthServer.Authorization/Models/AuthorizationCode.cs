@@ -4,16 +4,16 @@ using System.Text;
 
 namespace OAuthServer.Authorization.Models
 {
-    public class AuthorizationCode
+    public class AuthorizationCode<TUser> where TUser : IResourceOwner
     {
-        public AuthorizationCode(string code, Consent consent, DateTime expiry)
+        public AuthorizationCode(string code, Consent<TUser> consent, DateTime expiry)
         {
             Code = code;
             Consent = consent;
             Expiry = expiry;
         }
 
-        public Consent Consent { get; set; }
+        public Consent<TUser> Consent { get; set; }
         public string Code { get; set; }
 
         public DateTime Expiry { get; set; }

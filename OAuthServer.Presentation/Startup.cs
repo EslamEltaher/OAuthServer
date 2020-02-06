@@ -10,10 +10,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OAuthServer.Application;
+using OAuthServer.Authorization.EntityFramework;
+using OAuthServer.Authorization.EntityFramework.Repositories;
 using OAuthServer.Authorization.Repositories;
+using OAuthServer.Persistence;
 using OAuthServer.Util;
 
 namespace OAuthServer.Presentation
@@ -37,6 +42,10 @@ namespace OAuthServer.Presentation
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<IAuthorizationContext<User>, OAuthContext>(options => options.UseSqlServer(
+                 Configuration.GetConnectionString("Default")
+             )
+             );
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -47,16 +56,18 @@ namespace OAuthServer.Presentation
 
             services.AddScoped<JwtSecurityTokenHelper>();
 
-            services.AddScoped<IClientRepository, FakeClientRepository>();
-            services.AddScoped<IConsentRepository, FakeConsentRepository>();
-            services.AddScoped<IAuthorizationCodeRepository, FakeAuthorizationCodeRepository>();
+            services.AddScoped<IClientRepository, EFClientRepository<User>>();
+            services.AddScoped<IConsentRepository<User>, EFConsentRepository<User>>();
+            //services.AddScoped<IClientRepository, FakeClientRepository>();
+            //services.AddScoped<IConsentRepository, FakeConsentRepository>();
+            services.AddScoped<IAuthorizationCodeRepository<User>, FakeAuthorizationCodeRepository<User>>();
 
-            new FakeClientRepository().AddClient(new Authorization.Models.Client()
-            {
-                Client_Id = "client_1",
-                Client_Secret = "password_1",
-                Redirect_Uri = "http://tryingOAuth.com/cb"
-            });
+            //new FakeClientRepository().AddClient(new Authorization.Models.Client()
+            //{
+            //    Client_Id = "client_1",
+            //    Client_Secret = "password_1",
+            //    Redirect_Uri = "http://tryingOAuth.com/cb"
+            //});
 
             var keyInConfiguration = Configuration.GetSection("SecurityConfig:SigningKey").Value;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyInConfiguration));

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace OAuthServer.Authorization.Repositories
 {
-    public interface IAuthorizationCodeRepository
+    public interface IAuthorizationCodeRepository<TUser> where TUser : IResourceOwner
     {
-        Task<AuthorizationCode> GetAuthorizationCodeByUserId(string client_id, string user_id);
-        Task<AuthorizationCode> GetAuthorizationCodeByCode(string code);
-        void AddAuthorizationCode(AuthorizationCode code);
-        void RemoveRange(IEnumerable<AuthorizationCode> codes);
-        void InvalidateCode(AuthorizationCode code);
+        Task<AuthorizationCode<TUser>> GetAuthorizationCodeByUserId(string client_id, string user_id);
+        Task<AuthorizationCode<TUser>> GetAuthorizationCodeByCode(string code);
+        void AddAuthorizationCode(AuthorizationCode<TUser> code);
+        void RemoveRange(IEnumerable<AuthorizationCode<TUser>> codes);
+        void InvalidateCode(AuthorizationCode<TUser> code);
     }
 }

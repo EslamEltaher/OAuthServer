@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Authorization.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Persistence", "OAuthServer.Persistence\OAuthServer.Persistence.csproj", "{BCDBA3C1-16BD-4255-ABA6-810142FA3308}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthServer.Application", "OAuthServer.Application\OAuthServer.Application.csproj", "{7ABC3999-6C32-421F-B0E6-67AA810AD893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer.Application", "OAuthServer.Application\OAuthServer.Application.csproj", "{7ABC3999-6C32-421F-B0E6-67AA810AD893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

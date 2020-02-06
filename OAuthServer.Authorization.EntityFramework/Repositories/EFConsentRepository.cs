@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace OAuthServer.Authorization.EntityFramework.Repositories
 {
-    public class EFConsentRepository : IConsentRepository
+    public class EFConsentRepository<TUser> : IConsentRepository<TUser> where TUser : class, IResourceOwner
     {
-        private readonly IAuthorizationContext _authorizationContext;
+        private readonly IAuthorizationContext<TUser> _authorizationContext;
 
-        public EFConsentRepository(IAuthorizationContext authorizationContext)
+        public EFConsentRepository(IAuthorizationContext<TUser> authorizationContext)
         {
             _authorizationContext = authorizationContext;
         }
-        public void AddConsent(Consent consent)
+        public void AddConsent(Consent<TUser> consent)
         {
             _authorizationContext.Consents.Add(consent);
         }
 
-        public async Task<Consent> GetUserConsentByClientId(string client_id, string user_id)
+        public async Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id)
         {
             return await _authorizationContext
                 .Consents

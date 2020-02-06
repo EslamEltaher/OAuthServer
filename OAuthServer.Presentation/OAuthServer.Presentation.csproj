@@ -10,7 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OAuthServer.Application\OAuthServer.Application.csproj" />
+    <ProjectReference Include="..\OAuthServer.Authorization.EntityFramework\OAuthServer.Authorization.EntityFramework.csproj" />
     <ProjectReference Include="..\OAuthServer.Authorization\OAuthServer.Authorization.csproj" />
+    <ProjectReference Include="..\OAuthServer.Persistence\OAuthServer.Persistence.csproj" />
     <ProjectReference Include="..\OAuthServer.Util\OAuthServer.Util.csproj" />
   </ItemGroup>
 

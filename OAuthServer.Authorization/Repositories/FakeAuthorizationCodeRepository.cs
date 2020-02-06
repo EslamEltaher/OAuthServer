@@ -7,21 +7,21 @@ using OAuthServer.Authorization.Models;
 
 namespace OAuthServer.Authorization.Repositories
 {
-    public class FakeAuthorizationCodeRepository : IAuthorizationCodeRepository
+    public class FakeAuthorizationCodeRepository<TUser> : IAuthorizationCodeRepository<TUser> where TUser : IResourceOwner
     {
-        public static List<AuthorizationCode> AuthorizationCodes { get; }
+        public static List<AuthorizationCode<TUser>> AuthorizationCodes { get; }
         static FakeAuthorizationCodeRepository()
         {
-            AuthorizationCodes = new List<AuthorizationCode>();
+            AuthorizationCodes = new List<AuthorizationCode<TUser>>();
         }
 
 
-        public void AddAuthorizationCode(AuthorizationCode code)
+        public void AddAuthorizationCode(AuthorizationCode<TUser> code)
         {
             AuthorizationCodes.Add(code);
         }
 
-        public async Task<AuthorizationCode> GetAuthorizationCodeByUserId(string client_id, string user_id)
+        public async Task<AuthorizationCode<TUser>> GetAuthorizationCodeByUserId(string client_id, string user_id)
         {
             var code = AuthorizationCodes.FirstOrDefault(c => c.Consent.Client_Id == client_id 
                 && c.Consent.User_Id == user_id
@@ -31,7 +31,7 @@ namespace OAuthServer.Authorization.Repositories
             return await Task.FromResult(code);
         }
 
-        public void RemoveRange(IEnumerable<AuthorizationCode> codes)
+        public void RemoveRange(IEnumerable<AuthorizationCode<TUser>> codes)
         {
             foreach (var code in codes)
             {
@@ -39,13 +39,13 @@ namespace OAuthServer.Authorization.Repositories
             }
         }
 
-        public async Task<AuthorizationCode> GetAuthorizationCodeByCode(string code)
+        public async Task<AuthorizationCode<TUser>> GetAuthorizationCodeByCode(string code)
         {
             var authorization_code = AuthorizationCodes.FirstOrDefault(c => c.Code == code);
             return await Task.FromResult(authorization_code);
         }
 
-        public void InvalidateCode(AuthorizationCode code)
+        public void InvalidateCode(AuthorizationCode<TUser> code)
         {
             code.Expired = true;
             //update code
