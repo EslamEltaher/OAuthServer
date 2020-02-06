@@ -22,6 +22,7 @@ namespace OAuthServer.Authorization.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TUser>().HasKey(c => c.User_Id);
             modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
             modelBuilder.Entity<Consent<TUser>>().HasKey(c => new { c.Client_Id, c.User_Id });
 
