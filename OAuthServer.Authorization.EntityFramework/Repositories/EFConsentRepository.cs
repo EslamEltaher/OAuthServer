@@ -10,9 +10,9 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
 {
     public class EFConsentRepository<TUser> : IConsentRepository<TUser> where TUser : class, IResourceOwner
     {
-        private readonly IAuthorizationContext<TUser> _authorizationContext;
+        private readonly AuthorizationContext<TUser> _authorizationContext;
 
-        public EFConsentRepository(IAuthorizationContext<TUser> authorizationContext)
+        public EFConsentRepository(AuthorizationContext<TUser> authorizationContext)
         {
             _authorizationContext = authorizationContext;
         }
