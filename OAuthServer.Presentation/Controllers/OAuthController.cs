@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OAuthServer.Application;
+using OAuthServer.Authorization.EntityFramework;
 using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using OAuthServer.Presentation.Models;
@@ -15,17 +16,23 @@ namespace OAuthServer.Presentation.Controllers
 {
     public class OAuthController : Controller
     {
-        private readonly IClientRepository _clientRepository;
-        private readonly IConsentRepository<User> _consentRepository;
+
+        private readonly AuthUnitOfWork<User> _authUnitOfWork;
+        //private readonly IClientRepository _clientRepository;
+        //private readonly IConsentRepository<User> _consentRepository;
         private readonly IAuthorizationCodeRepository<User> _authorizationCodeRepository;
         private readonly JwtSecurityTokenHelper _tokenHelper;
 
-        public OAuthController(IClientRepository clientRepository, IConsentRepository<User> consentRepository, IAuthorizationCodeRepository<User> authorizationCodeRepository, JwtSecurityTokenHelper tokenHelper)
+        public OAuthController(AuthUnitOfWork<User> authUnitOfWork, 
+            //IClientRepository clientRepository, IConsentRepository<User> consentRepository, 
+            IAuthorizationCodeRepository<User> authorizationCodeRepository, JwtSecurityTokenHelper tokenHelper)
         {
-            _clientRepository = clientRepository;
-            _consentRepository = consentRepository;
+            _authUnitOfWork = authUnitOfWork;
+            //_clientRepository = clientRepository;
+            //_consentRepository = consentRepository;
             _authorizationCodeRepository = authorizationCodeRepository;
             _tokenHelper = tokenHelper;
+
         }
 
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -36,9 +43,9 @@ namespace OAuthServer.Presentation.Controllers
         {
             bool valid = ModelState.IsValid;
 
-            var username = "user1";
+            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
 
-            var client = await _clientRepository.GetClientById(model.client_id);
+            var client = await _authUnitOfWork.ClientRepository.GetClientById(model.client_id);
             if(client == null)
             {
                 return BadRequest("Unrecognized client_id");
@@ -54,7 +61,7 @@ namespace OAuthServer.Presentation.Controllers
                 //ModelState.AddModelError("")
             }
 
-            var consent = await _consentRepository.GetUserConsentByClientId(model.client_id, username);
+            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, username);
 
             bool isConsentRequired = true;
 
@@ -74,9 +81,9 @@ namespace OAuthServer.Presentation.Controllers
         [Route("OAuth/Authorize")]
         public async Task<IActionResult> Authorize(AuthorizeModel model)
         {
-            var username = "user1";
+            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
 
-            var consent = await _consentRepository.GetUserConsentByClientId(model.client_id, username);
+            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, username);
 
             if (consent == null)
             {
@@ -86,8 +93,8 @@ namespace OAuthServer.Presentation.Controllers
                     User_Id = username,
                     Scope = model.scope
                 };
-                _consentRepository.AddConsent(consent);
-                //DB.SaveChanges
+                _authUnitOfWork.ConsentRepository.AddConsent(consent);
+                await _authUnitOfWork.SaveAsync();
             }
 
             var existingcode = await _authorizationCodeRepository.GetAuthorizationCodeByUserId(model.client_id, username);
@@ -121,7 +128,7 @@ namespace OAuthServer.Presentation.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var username = "user1";
+            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
 
             if (model.Grant_Type != "authorization_code")
             {
@@ -131,7 +138,7 @@ namespace OAuthServer.Presentation.Controllers
             }
 
             // validate client
-            var client = await _clientRepository.GetClientById(model.Client_Id);
+            var client = await _authUnitOfWork.ClientRepository.GetClientById(model.Client_Id);
             if (client.Client_Secret != model.Client_Secret)
                 return BadRequest("Invalid Client Information");
 

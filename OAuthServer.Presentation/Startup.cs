@@ -44,12 +44,19 @@ namespace OAuthServer.Presentation
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<IAuthorizationContext<User>, OAuthContext>(options => options.UseSqlServer(
-                 Configuration.GetConnectionString("Default")
-             )
-             );
+            services.AddDbContext<IAuthorizationContext<User>, AuthorizationContext<User>>(options => {
+                options.UseSqlServer(
+                     Configuration.GetConnectionString("Default")
+                 );
+                //options.UseApplicationServiceProvider()
+             });
 
-            services.AddScoped<OAuthContext>();
+            services.AddDbContext<OAuthContext>(options => {
+                options.UseSqlServer(
+                     Configuration.GetConnectionString("Default")
+                 );
+                //options.UseApplicationServiceProvider()
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -62,6 +69,8 @@ namespace OAuthServer.Presentation
 
             services.AddScoped<IClientRepository, EFClientRepository<User>>();
             services.AddScoped<IConsentRepository<User>, EFConsentRepository<User>>();
+            services.AddScoped<AuthorizationContext<User>>();
+            services.AddScoped<AuthUnitOfWork<User>>();
             //services.AddScoped<IClientRepository, FakeClientRepository>();
             //services.AddScoped<IConsentRepository, FakeConsentRepository>();
             services.AddScoped<IAuthorizationCodeRepository<User>, FakeAuthorizationCodeRepository<User>>();
