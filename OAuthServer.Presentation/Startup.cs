@@ -15,10 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OAuthServer.Application;
+using OAuthServer.Application.Repository;
 using OAuthServer.Authorization.EntityFramework;
 using OAuthServer.Authorization.EntityFramework.Repositories;
 using OAuthServer.Authorization.Repositories;
 using OAuthServer.Persistence;
+using OAuthServer.Persistence.Reopsitories;
 using OAuthServer.Util;
 
 namespace OAuthServer.Presentation
@@ -47,6 +49,8 @@ namespace OAuthServer.Presentation
              )
              );
 
+            services.AddScoped<OAuthContext>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton(new JwtTokenConfigurations() {
@@ -61,6 +65,8 @@ namespace OAuthServer.Presentation
             //services.AddScoped<IClientRepository, FakeClientRepository>();
             //services.AddScoped<IConsentRepository, FakeConsentRepository>();
             services.AddScoped<IAuthorizationCodeRepository<User>, FakeAuthorizationCodeRepository<User>>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //new FakeClientRepository().AddClient(new Authorization.Models.Client()
             //{

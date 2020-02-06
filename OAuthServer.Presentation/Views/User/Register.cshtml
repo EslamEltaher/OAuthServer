@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register</h2>
+
+<form asp-action="UserRegister" asp-controller="User" method="post">
+    <div>
+        <label for="Username">Username: </label> <input type="text" name="Username" />
+    </div>
+    <div>
+        <label for="Password">Password: </label> <input type="password" name="Password" />
+    </div>
+    <div>
+        <input type="hidden" name="ReturnUrl" value="@(Model  as string)" />
+    </div>
+    <div>@(Model)</div>
+    <div>
+        <input type="submit" />
+    </div>
+</form>
