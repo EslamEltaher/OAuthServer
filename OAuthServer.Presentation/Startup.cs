@@ -44,14 +44,14 @@ namespace OAuthServer.Presentation
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<IAuthorizationContext<User>, AuthorizationContext<User>>(options => {
-                options.UseSqlServer(
-                     Configuration.GetConnectionString("Default")
-                 );
-                //options.UseApplicationServiceProvider()
-             });
+            //services.AddDbContext</*IAuthorizationContext<User>, */AuthorizationContext<User>>(options => {
+            //    options.UseSqlServer(
+            //         Configuration.GetConnectionString("Default")
+            //     );
+            //    //options.UseApplicationServiceProvider()
+            // });
 
-            services.AddDbContext<OAuthContext>(options => {
+            InjectOAuthContext<User, OAuthContext>(services, options => {
                 options.UseSqlServer(
                      Configuration.GetConnectionString("Default")
                  );
@@ -67,10 +67,10 @@ namespace OAuthServer.Presentation
 
             services.AddScoped<JwtSecurityTokenHelper>();
 
-            services.AddScoped<IClientRepository, EFClientRepository<User>>();
-            services.AddScoped<IConsentRepository<User>, EFConsentRepository<User>>();
-            services.AddScoped<AuthorizationContext<User>>();
-            services.AddScoped<AuthUnitOfWork<User>>();
+            services.AddScoped<IClientRepository, EFClientRepository<User, OAuthContext>>();
+            services.AddScoped<IConsentRepository<User>, EFConsentRepository<User, OAuthContext>>();
+            //services.AddScoped<AuthorizationContext<User>>();
+            services.AddScoped<AuthUnitOfWork<User>, AuthUnitOfWork<User, OAuthContext>>();
             //services.AddScoped<IClientRepository, FakeClientRepository>();
             //services.AddScoped<IConsentRepository, FakeConsentRepository>();
             services.AddScoped<IAuthorizationCodeRepository<User>, FakeAuthorizationCodeRepository<User>>();
@@ -112,17 +112,25 @@ namespace OAuthServer.Presentation
             #region Trials
             //services.AddAuthentication(options => {
 
-                //options.AddScheme("cookieBased", builder => {
-                //    builder.HandlerType = typeof(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler);
-                //});
+            //options.AddScheme("cookieBased", builder => {
+            //    builder.HandlerType = typeof(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler);
+            //});
 
-                //    options.DefaultAuthenticateScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
-                //    options.DefaultSignInScheme= Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
-                //    options.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultAuthenticateScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultSignInScheme= Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
             //})
 
             #endregion
             #endregion
+        }
+
+        private void InjectOAuthContext<TUser, Timplementation>(IServiceCollection services, Action<DbContextOptionsBuilder> builder) 
+            where TUser: class, Authorization.Models.IResourceOwner 
+            where Timplementation : AuthorizationContext<TUser>
+        {
+            //services.AddDbContext<AuthorizationContext<TUser>, Timplementation>(builder);
+            services.AddDbContext<Timplementation>(builder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

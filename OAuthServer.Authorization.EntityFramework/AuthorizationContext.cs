@@ -7,10 +7,10 @@ using System.Text;
 namespace OAuthServer.Authorization.EntityFramework
 {
     //public class AuthorizationContext<TUser> : DbContext, IAuthorizationContext<TUser> where TUser : class, IResourceOwner
-    public class AuthorizationContext<TUser> : DbContext, IAuthorizationContext<TUser> where TUser : class, IResourceOwner
+    public class AuthorizationContext<TUser> : DbContext where TUser : class, IResourceOwner
     {
         //constructor
-        public AuthorizationContext(DbContextOptions<AuthorizationContext<TUser>> options):base(options) { }
+        public AuthorizationContext(DbContextOptions options):base(options) { }
 
         //entities
         public DbSet<TUser> Users { get ; set; }

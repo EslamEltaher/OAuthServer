@@ -8,11 +8,17 @@ using System.Threading.Tasks;
 
 namespace OAuthServer.Authorization.EntityFramework.Repositories
 {
-    public class EFClientRepository<TUser> : IClientRepository/*<TUser>*/ where TUser : class, IResourceOwner
+    public class EFClientRepository<TUser, TContext> : IClientRepository/*<TUser>*/ 
+        where TUser : class, IResourceOwner
+        where TContext : AuthorizationContext<TUser>
     {
         private readonly AuthorizationContext<TUser> _authorizationContext;
 
         public EFClientRepository(AuthorizationContext<TUser> authorizationContext)
+        {
+            _authorizationContext = authorizationContext;
+        }
+        public EFClientRepository(TContext authorizationContext)
         {
             _authorizationContext = authorizationContext;
         }

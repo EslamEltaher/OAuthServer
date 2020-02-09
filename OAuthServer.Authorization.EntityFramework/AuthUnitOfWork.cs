@@ -31,4 +31,16 @@ namespace OAuthServer.Authorization.EntityFramework
         }
 
     }
+
+    public class AuthUnitOfWork<TUser, TContext> : AuthUnitOfWork<TUser> 
+        where TUser : class, IResourceOwner
+        where TContext : AuthorizationContext<TUser>
+    {
+        private readonly AuthorizationContext<TUser> _context;
+
+        public AuthUnitOfWork(IClientRepository clientRepository,
+            IConsentRepository<TUser> consentRepository,
+            TContext context)  : base(clientRepository, consentRepository, context) { }
+
+    }
 }

@@ -6,16 +6,16 @@ using System;
 
 namespace OAuthServer.Persistence
 {
-    public class OAuthContext: DbContext, IAuthorizationContext<User>
+    public class OAuthContext: AuthorizationContext<User>
     {
         //constructor
         public OAuthContext(DbContextOptions<OAuthContext> options) : base(options) { }
 
 
         //IAuthorizationContext
-        public DbSet<Consent<User>> Consents { get; set; }
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<User> Users { get; set; }
+        //public DbSet<Consent<User>> Consents { get; set; }
+        //public DbSet<Client> Clients { get; set; }
+        //public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
