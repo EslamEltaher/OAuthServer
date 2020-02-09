@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,6 @@ namespace OAuthServer.Presentation.Controllers
         {
             bool valid = ModelState.IsValid;
 
-            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
 
             var client = await _authUnitOfWork.ClientRepository.GetClientById(model.client_id);
             if(client == null)
@@ -61,7 +61,8 @@ namespace OAuthServer.Presentation.Controllers
                 //ModelState.AddModelError("")
             }
 
-            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, username);
+            var user_id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, user_id);
 
             bool isConsentRequired = true;
 
@@ -81,23 +82,23 @@ namespace OAuthServer.Presentation.Controllers
         [Route("OAuth/Authorize")]
         public async Task<IActionResult> Authorize(AuthorizeModel model)
         {
-            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
+            var user_id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, username);
+            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.client_id, user_id);
 
             if (consent == null)
             {
                 consent = consent ?? new Consent<User>()
                 {
                     Client_Id = model.client_id,
-                    User_Id = username,
+                    User_Id = user_id,
                     Scope = model.scope
                 };
                 _authUnitOfWork.ConsentRepository.AddConsent(consent);
                 await _authUnitOfWork.SaveAsync();
             }
 
-            var existingcode = await _authorizationCodeRepository.GetAuthorizationCodeByUserId(model.client_id, username);
+            var existingcode = await _authorizationCodeRepository.GetAuthorizationCodeByUserId(model.client_id, user_id);
             if(existingcode != null)
             {
                 //_authorizationCodeRepository.RemoveRange(new List<AuthorizationCode>() { existingcode });
@@ -128,7 +129,7 @@ namespace OAuthServer.Presentation.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var username = "3ef7fb91-7dd6-4a35-b9a9-99d5fec053a8";
+            //var username = "209300e3-95f4-49a6-a58d-e57be0f69757";
 
             if (model.Grant_Type != "authorization_code")
             {
@@ -150,9 +151,9 @@ namespace OAuthServer.Presentation.Controllers
             //invalidate Code after use
             _authorizationCodeRepository.InvalidateCode(code);
 
-            var jwtToken = _tokenHelper.GenerateJwtToken(new List<System.Security.Claims.Claim>() {
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, username),
-                new System.Security.Claims.Claim("cid", client.Client_Id),
+            var jwtToken = _tokenHelper.GenerateJwtToken(new List<Claim>() {
+                new Claim(ClaimTypes.NameIdentifier, code.Consent.User_Id),
+                new Claim("cid", client.Client_Id),
             });
 
             var response = new AccessTokenResponse()

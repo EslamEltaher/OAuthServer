@@ -44,7 +44,8 @@ namespace OAuthServer.Presentation.Controllers
                 return Unauthorized();
 
             var claims = new List<Claim>() {
-                new Claim(ClaimTypes.NameIdentifier, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, loginUser.User_Id),
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -54,7 +55,12 @@ namespace OAuthServer.Presentation.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            return Redirect(Request.Form["ReturnUrl"]);
+            if (string.IsNullOrEmpty(Request.Form["ReturnUrl"]))
+                ReturnUrl = "/";
+            else
+                ReturnUrl = Request.Form["ReturnUrl"];
+
+            return Redirect(ReturnUrl);
         }
 
 
@@ -85,6 +91,18 @@ namespace OAuthServer.Presentation.Controllers
             await _context.SaveChangesAsync();
 
             return await UserLogin(new UserForLogin() { Username = userForRegister.Username, Password = userForRegister.Password }, "");
+        }
+
+        [HttpGet]
+        [Route("User/Logout")]
+        public async Task<IActionResult> Logout(string ReturnUrl)
+        {
+            if (string.IsNullOrEmpty(ReturnUrl))
+                ReturnUrl = "/";
+
+            await HttpContext.SignOutAsync();
+
+            return Redirect(ReturnUrl);
         }
     }
 }
