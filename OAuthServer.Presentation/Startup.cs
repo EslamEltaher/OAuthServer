@@ -91,7 +91,7 @@ namespace OAuthServer.Presentation
 
             #region Authentication
             services.AddAuthentication(options => {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
                 options.LoginPath = "/User/Login";
