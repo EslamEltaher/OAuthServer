@@ -14,6 +14,8 @@ namespace OAuthServer.Authorization.Models
 
         public string Scope { get; set; }
 
+        public string RefreshToken { get; set; }
+
         //public bool Granted { get; set; }
     }
 }
