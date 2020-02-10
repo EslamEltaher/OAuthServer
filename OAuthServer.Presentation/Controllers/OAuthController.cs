@@ -105,9 +105,10 @@ namespace OAuthServer.Presentation.Controllers
                 existingcode.Expired = true;
             }
 
-            var bytes = new byte[16];
-            new Random().NextBytes(bytes);
-            string hex = BitConverter.ToString(bytes).Replace("-", string.Empty);
+            var hex = RandomStringGenerator.GenerateHex(16);
+            //var bytes = new byte[16];
+            //new Random().NextBytes(bytes);
+            //string hex = BitConverter.ToString(bytes).Replace("-", string.Empty);
 
             var authCode = new AuthorizationCode<User>(hex, consent, DateTime.Now.AddMinutes(5));
             _authorizationCodeRepository.AddAuthorizationCode(authCode);
