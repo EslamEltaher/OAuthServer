@@ -10,5 +10,6 @@ namespace OAuthServer.Presentation.Models
         public string Access_Token { get; set; }
         public string Scope { get; set; }
         public string Token_Type { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

@@ -132,7 +132,11 @@ namespace OAuthServer.Presentation.Controllers
 
             //var username = "209300e3-95f4-49a6-a58d-e57be0f69757";
 
-            if (model.Grant_Type != "authorization_code")
+            List<string> Grant_Types = new List<string>() {
+                "authorization_code",
+                "refresh_token"
+            };
+            if (!Grant_Types.Contains(model.Grant_Type))
             {
                 ModelState.AddModelError("grant_type", "unsupported grant type");
 
@@ -144,16 +148,36 @@ namespace OAuthServer.Presentation.Controllers
             if (client.Client_Secret != model.Client_Secret)
                 return BadRequest("Invalid Client Information");
 
-            // get code
-            var code = await _authorizationCodeRepository.GetAuthorizationCodeByCode(model.Code);
-            if (code == null || code.Expired || code.Expiry <= DateTime.Now)
-                return BadRequest("Code Invalid or Expired");
+            var consent = default(Consent<User>);
+            if (model.Grant_Type.ToLower() == "authorization_code")
+            {
+                // get code
+                var code = await _authorizationCodeRepository.GetAuthorizationCodeByCode(model.Code);
+                if (code == null || code.Expired || code.Expiry <= DateTime.Now)
+                    return BadRequest("Code Invalid or Expired");
 
-            //invalidate Code after use
-            _authorizationCodeRepository.InvalidateCode(code);
+                //invalidate Code after use
+                _authorizationCodeRepository.InvalidateCode(code);
 
+                consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(model.Client_Id, code.Consent.User_Id);
+            }
+
+            else if (model.Grant_Type.ToLower() == "refresh_token")
+            {
+                consent = await _authUnitOfWork.ConsentRepository.GetConsentByRefreshToken(model.Code);
+
+                if (consent == null)
+                    return BadRequest("Invalid Refresh Token");
+            }
+
+            //changing refresh token
+            consent.RefreshToken = RandomStringGenerator.GenerateHex(32);
+            _authUnitOfWork.ConsentRepository.UpdateConsent(consent);
+            await _authUnitOfWork.SaveAsync();
+
+            var userId = consent.User_Id;
             var jwtToken = _tokenHelper.GenerateJwtToken(new List<Claim>() {
-                new Claim(ClaimTypes.NameIdentifier, code.Consent.User_Id),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim("cid", client.Client_Id),
             });
 
@@ -161,7 +185,8 @@ namespace OAuthServer.Presentation.Controllers
             {
                 Access_Token = jwtToken,
                 Scope = "my_scope",
-                Token_Type = "bearer"
+                Token_Type = "bearer",
+                RefreshToken = consent.RefreshToken
             };
 
             return Ok(response);
