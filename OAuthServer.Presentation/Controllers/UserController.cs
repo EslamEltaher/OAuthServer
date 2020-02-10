@@ -75,9 +75,13 @@ namespace OAuthServer.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserRegister(UserForLogin userForRegister)
+        public async Task<IActionResult> UserRegister(UserForRegistration userForRegister)
         {
-            var user = new User() { Username = userForRegister.Username };
+            var user = new User() {
+                Username = userForRegister.Username,
+                Fullname = userForRegister.Fullname,
+                IsDeveloper = userForRegister.IsDeveloper,
+            };
 
             user = await _userRepository.RegisterUser(user, userForRegister.Password);
 
