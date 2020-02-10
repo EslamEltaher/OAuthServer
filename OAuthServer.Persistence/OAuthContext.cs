@@ -19,9 +19,9 @@ namespace OAuthServer.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasKey(c => c.User_Id);
-            modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
-            modelBuilder.Entity<Consent<User>>().HasKey(c => new { c.Client_Id, c.User_Id });
+            //modelBuilder.Entity<User>().HasKey(c => c.User_Id);
+            //modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
+            //modelBuilder.Entity<Consent<User>>().HasKey(c => new { c.Client_Id, c.User_Id });
             
             base.OnModelCreating(modelBuilder);
         }
