@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OAuthServer.Persistence;
 
 namespace OAuthServer.Persistence.Migrations
 {
     [DbContext(typeof(OAuthContext))]
-    partial class OAuthContextModelSnapshot : ModelSnapshot
+    [Migration("20200210102835_UpdateUser_AndDeveloperClients")]
+    partial class UpdateUser_AndDeveloperClients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
