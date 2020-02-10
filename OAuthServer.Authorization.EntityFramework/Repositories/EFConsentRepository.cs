@@ -33,6 +33,11 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
             _authorizationContext.Consents.Remove(consent);
         }
 
+        public void UpdateConsent(Consent<TUser> consent)
+        {
+            _authorizationContext.Consents.Update(consent);
+        }
+
         public async Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id)
         {
             return await _authorizationContext
@@ -47,6 +52,13 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
                 .Include(c => c.client)
                 .Where(c => c.User_Id == user_id)
                 .ToListAsync();
+        }
+
+        public async Task<Consent<TUser>> GetConsentByRefreshToken(string refresh_token)
+        {
+            return await _authorizationContext
+                .Consents
+                .FirstOrDefaultAsync(c => c.RefreshToken == refresh_token);
         }
     }
 }

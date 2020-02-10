@@ -34,9 +34,19 @@ namespace OAuthServer.Authorization.Repositories
             return await Task.FromResult(consents);
         }
 
+        public async Task<Consent<TUser>> GetConsentByRefreshToken(string refresh_token)
+        {
+            var consent = Consents.FirstOrDefault(c => c.RefreshToken == refresh_token);
+            return await Task.FromResult(consent);
+        }
+
         public void DeleteConsent(Consent<TUser> consent)
         {
             Consents.Remove(consent);
+        }
+
+        public void UpdateConsent(Consent<TUser> consent)
+        {
         }
     }
 }

@@ -10,8 +10,11 @@ namespace OAuthServer.Authorization.Repositories
     {
         Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id);
         Task<IEnumerable<Consent<TUser>>> GetUserConsents(string user_id);
+        Task<Consent<TUser>> GetConsentByRefreshToken(string refresh_token);
+
 
         void AddConsent(Consent<TUser> consent);
         void DeleteConsent(Consent<TUser> consent);
+        void UpdateConsent(Consent<TUser> consent);
     }
 }
