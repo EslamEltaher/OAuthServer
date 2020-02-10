@@ -50,7 +50,8 @@ namespace OAuthServer.Presentation.Controllers
                 Client_Id = RandomStringGenerator.GenerateHex(16),
                 Client_Secret = RandomStringGenerator.GenerateHex(32),
                 Developer_Id = user_id,
-                Redirect_Uri = client.Redirect_Uri
+                Redirect_Uri = client.Redirect_Uri,
+                Client_Name = client.Client_Name
             };
 
             _authUnitOfWork.ClientRepository.AddClient(addedClient);
