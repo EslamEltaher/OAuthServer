@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "NewClient";
+}
+
+<h2>NewClient</h2>
+
+<form asp-action="AddClient" method="post">
+    <div>
+        <label for="Client_Name">client name</label>
+        <input required type="text" name="Client_Name" />
+    </div>
+    <div>
+        <label for="Redirect_Uri">redirect uri</label>
+        <input required type="text" name="Redirect_Uri" />
+    </div>
+    <div>
+        <button type="submit">Add Client</button>
+    </div>
+</form>
