@@ -9,8 +9,9 @@ namespace OAuthServer.Authorization.Models
         public string Client_Id { get; set; }
         public string Client_Secret { get; set; }
 
-        public string Developer_Id { get; set; }
-
+        public string Client_Name { get; set; }
         public string Redirect_Uri { get; set; }
+
+        public string Developer_Id { get; set; }
     }
 }
