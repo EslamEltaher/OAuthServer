@@ -28,5 +28,20 @@ namespace OAuthServer.Presentation.Controllers
 
             return View(consents);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RevokeAccess([FromForm]string Client_Id)
+        {
+            var user_id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var consent = await _authUnitOfWork.ConsentRepository.GetUserConsentByClientId(Client_Id, user_id);
+
+            if(consent != null)
+            {
+                _authUnitOfWork.ConsentRepository.DeleteConsent(consent);
+                await _authUnitOfWork.SaveAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

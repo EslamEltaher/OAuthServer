@@ -6,21 +6,24 @@
 <h2>Apps You Signed in</h2>
 @foreach (var consent in Model as IEnumerable<OAuthServer.Authorization.Models.Consent<OAuthServer.Application.User>>)
 {
-<div class="container">
-    <div>
-        <label>App Name:</label>
-        <span>@consent.client.Client_Name</span>
-    </div>
-    <div>
-        <label>App Name:</label>
-        <span>@consent.client.Client_Id</span>
-    </div>
-    <div>
-        <label>App Name:</label>
-        <span>@consent.client.Redirect_Uri</span>
-    </div>
-    <button asp-action="">Revoke Access</button>
-</div>
+    <form method="post">
+        <div class="container">
+            <div>
+                <label>App Name:</label>
+                <span>@consent.client.Client_Name</span>
+            </div>
+            <div>
+                <label>App Name:</label>
+                <span>@consent.client.Client_Id</span>
+            </div>
+            <div>
+                <label>App Name:</label>
+                <span>@consent.client.Redirect_Uri</span>
+            </div>
+            <input type="hidden" name="Client_Id" value="@consent.client.Client_Id" />
+            <button asp-action="RevokeAccess">Revoke Access</button>
+        </div>
+</form>
 <br />
 }
 
