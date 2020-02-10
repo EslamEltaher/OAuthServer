@@ -26,5 +26,17 @@ namespace OAuthServer.Authorization.Repositories
             var consent = Consents.FirstOrDefault(c => c.Client_Id == client_id && c.User_Id == user_id);
             return await Task.FromResult(consent);
         }
+
+        public async Task<IEnumerable<Consent<TUser>>> GetUserConsents(string user_id)
+        {
+            var consents = Consents.Where(c => c.User_Id == user_id).ToList();
+
+            return await Task.FromResult(consents);
+        }
+
+        public void DeleteConsent(Consent<TUser> consent)
+        {
+            Consents.Remove(consent);
+        }
     }
 }

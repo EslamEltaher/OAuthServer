@@ -3,6 +3,7 @@ using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,11 +28,24 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
             _authorizationContext.Consents.Add(consent);
         }
 
+        public void DeleteConsent(Consent<TUser> consent)
+        {
+            _authorizationContext.Consents.Remove(consent);
+        }
+
         public async Task<Consent<TUser>> GetUserConsentByClientId(string client_id, string user_id)
         {
             return await _authorizationContext
                 .Consents
                 .FirstOrDefaultAsync(c => c.Client_Id == client_id && c.User_Id == user_id);
+        }
+
+        public async Task<IEnumerable<Consent<TUser>>> GetUserConsents(string user_id)
+        {
+            return await _authorizationContext
+                .Consents
+                .Where(c => c.User_Id == user_id)
+                .ToListAsync();
         }
     }
 }
