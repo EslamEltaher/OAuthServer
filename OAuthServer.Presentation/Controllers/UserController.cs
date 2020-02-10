@@ -48,6 +48,9 @@ namespace OAuthServer.Presentation.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
+            if (loginUser.IsDeveloper)
+                claims.Add(new Claim(ClaimTypes.Role, "Developer"));
+
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var authProperties = new AuthenticationProperties() { };
