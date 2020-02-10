@@ -44,6 +44,7 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
         {
             return await _authorizationContext
                 .Consents
+                .Include(c => c.client)
                 .Where(c => c.User_Id == user_id)
                 .ToListAsync();
         }
