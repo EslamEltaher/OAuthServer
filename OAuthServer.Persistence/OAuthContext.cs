@@ -22,6 +22,10 @@ namespace OAuthServer.Persistence
             //modelBuilder.Entity<User>().HasKey(c => c.User_Id);
             //modelBuilder.Entity<Client>().HasKey(c => c.Client_Id);
             //modelBuilder.Entity<Consent<User>>().HasKey(c => new { c.Client_Id, c.User_Id });
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.DeveloperClients)
+                .WithOne()
+                .HasForeignKey(c => c.Developer_Id);
             
             base.OnModelCreating(modelBuilder);
         }
