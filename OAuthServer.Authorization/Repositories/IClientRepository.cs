@@ -11,6 +11,7 @@ namespace OAuthServer.Authorization.Repositories
         //IEnumerable<Client> GetAllClients();
 
         Task<Client> GetClientById(string client_id);
+        Task<IEnumerable<Client>> GetClientsForDeveloper(string developer_user_id);
 
         void AddClient(Client client);
     }

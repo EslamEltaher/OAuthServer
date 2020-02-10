@@ -3,6 +3,7 @@ using OAuthServer.Authorization.Models;
 using OAuthServer.Authorization.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,6 +33,14 @@ namespace OAuthServer.Authorization.EntityFramework.Repositories
             return await _authorizationContext
                 .Clients
                 .FirstOrDefaultAsync(c => c.Client_Id == client_id);
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsForDeveloper(string developer_user_id)
+        {
+            return await _authorizationContext
+                .Clients
+                .Where(c => c.Developer_Id == developer_user_id)
+                .ToListAsync();
         }
     }
 }

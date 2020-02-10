@@ -20,5 +20,10 @@ namespace OAuthServer.Authorization.Repositories
         {
             return await Task.FromResult(clients.FirstOrDefault(c => c.Client_Id == client_id));
         }
+
+        public async Task<IEnumerable<Client>> GetClientsForDeveloper(string developer_user_id)
+        {
+            return await Task.FromResult(clients.Where(c => c.Developer_Id == developer_user_id));
+        }
     }
 }
