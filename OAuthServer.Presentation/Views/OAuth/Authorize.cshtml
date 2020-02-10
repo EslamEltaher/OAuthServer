@@ -4,7 +4,11 @@
 }
 
 <form asp-controller="OAuth" asp-action="Authorize" method="post">
-    <button type="submit">Submit</button>
+    <div class="panel-info">
+        <h2>Authorize</h2>
+        <h3>An application <span class="text-danger">@((Model as AuthorizeModel).client_name)</span> Requires your approval to login</h3>
+        <button type="submit">Approve</button>
+    </div>
 
     @if (Model is AuthorizeModel)
     {
@@ -17,5 +21,4 @@
     }
     @Html.AntiForgeryToken()
 </form>
-<h2>Authorize</h2>
 

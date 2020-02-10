@@ -17,5 +17,7 @@ namespace OAuthServer.Presentation.Models
         [Required]
         public string scope { get; set; }
         public string state { get; set; }
+
+        public string client_name { get; set; }
     }
 }

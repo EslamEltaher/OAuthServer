@@ -74,6 +74,7 @@ namespace OAuthServer.Presentation.Controllers
                 return await Authorize(model);
             }
 
+            model.client_name = client.Client_Name;
             return View("Authorize", model);
         }
 
